@@ -35,7 +35,9 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate{
     
     @IBAction func resetBtnDidTap(_ sender: Any) {
         print("Emailing Password Link")
+        Api.User.resetPassword(email: self.emailTextField.text!, onSuccess: { print(SUCCESS_EMAIL_RESET)
+        }) { (errorMessage) in
+            print(errorMessage)
+        }
     }
-    
-
 }

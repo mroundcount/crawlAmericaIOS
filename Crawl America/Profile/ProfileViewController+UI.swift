@@ -55,7 +55,7 @@ extension ProfileViewController {
         purchaseBtn.layer.cornerRadius = 45
         purchaseBtn.clipsToBounds = true
         purchaseBtn.setImage(UIImage(named: "dollar_sign"), for: .normal)
-        purchaseBtn.imageView?.contentMode = .scaleToFill
+        purchaseBtn.imageView?.contentMode = .scaleAspectFit
     }
     
     func setUpPurchaseLbl() {

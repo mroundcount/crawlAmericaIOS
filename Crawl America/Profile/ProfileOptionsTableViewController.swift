@@ -64,6 +64,8 @@ class ProfileOptionsTableViewController: UITableViewController, UITextFieldDeleg
     
     @IBAction func logOutBtnDidTap(_ sender: Any) {
         print("Log Out Button Tapped")
+        Api.User.logOut()
+        natigateToHome()
     }
     
     @IBAction func deleteAccountBtnDidTap(_ sender: Any) {
@@ -91,9 +93,8 @@ class ProfileOptionsTableViewController: UITableViewController, UITextFieldDeleg
         let termsOfServiceLblTap = UITapGestureRecognizer(target: self, action: #selector(self.termsOfServiceLblTap(_:)))
         self.termsOfServiceLbl.isUserInteractionEnabled = true
         self.termsOfServiceLbl.addGestureRecognizer(termsOfServiceLblTap)
-        
-
     }
+    
     @objc func relationshipStatusTap(_ sender: UITapGestureRecognizer) {
         print("Relationship label tapped")
     }
@@ -105,8 +106,14 @@ class ProfileOptionsTableViewController: UITableViewController, UITextFieldDeleg
     @objc func termsOfServiceLblTap(_ sender: UITapGestureRecognizer) {
         print("Terms of Servie label tapped")
     }
+    
+    func natigateToHome() {
+        print("In function")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let home = storyboard.instantiateViewController(withIdentifier: IDENTIFIER_HOME_PAGE) as! HomeViewController
+        self.navigationController?.pushViewController(home, animated: true)
+    }
 }
-
 
 extension ProfileOptionsTableViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class SignInViewController: UIViewController, UITextFieldDelegate {
     
@@ -42,6 +43,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func signInBtnDidTap(_ sender: Any) {
         print("Signing In")
+        self.view.endEditing(true)
+        self.validateFields()
+        self.signIn(onSuccess: {
+            //(UIApplication.shared.delegate as! AppDelegate).configureInitialViewController()
+            // self.natigateToMainApp()
+        }) { (errorMessage) in
+            ProgressHUD.showError(errorMessage)
+        }
     }
     
     
@@ -57,4 +66,29 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.pushViewController(forgotPassword, animated: true)
     }
     
+    func signIn(onSuccess: @escaping() -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+        ProgressHUD.show("Loading...")
+        Api.User.signIn(email: self.emailTextField.text!, password: passwordTextField.text!, onSuccess: {
+            ProgressHUD.dismiss()
+            
+            if let scene = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                scene.configureInitialViewController()
+            }
+            
+        }) { (errorMessage) in
+            onError(errorMessage)
+        }
+    }
+    
+    func validateFields() {
+        guard let email = self.emailTextField.text, !email.isEmpty else {
+            ProgressHUD.showError(ERROR_EMPTY_EMAIL)
+            return
+        }
+        
+        guard let password = self.passwordTextField.text, !password.isEmpty else {
+            ProgressHUD.showError(ERROR_EMPTY_PASSWORD)
+            return
+        }
+    }
 }

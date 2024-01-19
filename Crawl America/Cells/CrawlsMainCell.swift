@@ -12,6 +12,8 @@ class CrawlMainCell: UITableViewCell {
     @IBOutlet weak var crawlLbl: UILabel!
     @IBOutlet weak var statusLbl: UILabel!
     
+    var crawls: Crawls!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setUpCell()
@@ -42,5 +44,14 @@ class CrawlMainCell: UITableViewCell {
     func setUpStatusLbl() {
         self.statusLbl.textColor = UIColor.white
         self.statusLbl.text = "Upcoming"
+    }
+    
+    //Function called from the table view controller
+    func configureCell(crawls: Crawls) {
+        self.crawls = crawls
+        Api.Crawls.loadAllCrawls { (crawls) in
+            print("test city \(crawls.city)")
+
+        }
     }
 }

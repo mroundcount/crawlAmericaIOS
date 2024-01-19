@@ -1,0 +1,6 @@
+framework module Pods_Crawl_AmericaTests {
+  umbrella header "Pods-Crawl AmericaTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

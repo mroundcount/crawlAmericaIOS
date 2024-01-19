@@ -13,9 +13,15 @@ class CrawlMainViewController: UIViewController {
     @IBOutlet weak var titleTextLbl: UILabel!
     @IBOutlet weak var myCrawlsTableView: UITableView!
     
+    var crawls: [Crawls] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        observeCrawls()
+        Api.User.getUserInforSingleEvent(uid: Api.User.currentUserId) { (user) in
+            print("testing user call: \(user.email)")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,13 +34,21 @@ class CrawlMainViewController: UIViewController {
         setUpTitleTextLbl()
         setupTableView()
     }
+    
+    func observeCrawls() {
+        self.crawls.removeAll()
+        Api.Crawls.loadAllCrawls { (crawls) in
+            self.crawls.append(crawls)
+            print("in array step 1")
+            print("crawl array \(crawls.id)")
+        }
+    }
 }
-
 
 extension CrawlMainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.crawls.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
     
@@ -39,12 +40,34 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func signUpBtnDidTap(_ sender: Any) {
-        print("Registering")
+        self.view.endEditing(true)
+        self.validateFields()
+        ProgressHUD.show("Loading...")
+        Api.User.createAccount(email: self.emailTextField.text!, password: self.passwordTextField.text!, onSuccess: {
+            ProgressHUD.dismiss()
+            if let scene = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                scene.configureInitialViewController()
+            }
+        }) { (errorMessage) in
+            print(errorMessage)
+        }
     }
     
     @IBAction func signInBtnDidTap(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let signIn = storyboard.instantiateViewController(withIdentifier: IDENTIFIER_SIGN_IN) as! SignInViewController
         self.navigationController?.pushViewController(signIn, animated: true)
+    }
+    
+    func validateFields() {
+        guard let email = self.emailTextField.text, !email.isEmpty else {
+            ProgressHUD.showError(ERROR_EMPTY_EMAIL)
+            return
+        }
+        
+        guard let password = self.passwordTextField.text, !password.isEmpty else {
+            ProgressHUD.showError(ERROR_EMPTY_PASSWORD)
+            return
+        }
     }
 }
